@@ -5,7 +5,8 @@ var favicon = require('serve-favicon');
 var path = require('path');
 var http = require('http');
 var config = require('config');
-var log = require('lib/log')(module);
+var log = require('util/log')(module);
+var createDb = require('util/createDb');
 
 var app = express();
 app.set('port', config.get('port'));
@@ -31,4 +32,5 @@ app.get('/', function(req, res){
 app.get('/person', function(req, res){
     res.render('person', { title: 'Astro Karma'})
 });
+
 module.exports = app;

@@ -6,12 +6,15 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "^1.16.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "ejs": "^2.5.5",
     "ejs-locals": "^1.0.2",
     "express": "~4.14.1",
+    "mongodb": "^2.2.22",
+    "mongoose": "^4.8.2",
     "morgan": "~1.7.0",
     "nconf": "^0.8.4",
     "serve-favicon": "^2.3.2",

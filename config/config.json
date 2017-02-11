@@ -1,3 +1,13 @@
 {
-  "port" : "3001"
+  "port" : "3001",
+  "mongoose" :{
+    "uri" : "mongodb://localhost:27017/astrokarma",
+    "options" : {
+      "server" : {
+        "socketOptions" : {
+          "keepAlive" : 1
+        }
+      }
+    }
+  }
 }
