@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+/**
+ * Routing
+ */
+module.exports = function(app){
+  "use strict";
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+    // main page - top by karma
+    app.get('/', function(req, res){
+        res.render('index', { title: 'Astro Karma'})
+    });
 
-module.exports = router;
+    // person page
+    app.get('/person', function(req, res){
+        res.render('person', { title: 'Astro Karma'})
+    });
+}
