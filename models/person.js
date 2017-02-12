@@ -1,7 +1,30 @@
 var mongo = require('../util/mongo'),
     Schema = mongo.Schema;
 
-var schema = new Schema({
+var KarmaSchema = new Schema({
+    positive : {
+        type: Boolean,
+        required: true
+    },
+    stamp : {
+        type: Date,
+        required: true
+    },
+    note : {
+        type: String,
+        required: false
+    },
+    satisfy : {
+        type: Boolean,
+        required: true
+    },
+    satisfyStamp : {
+        type: Date,
+        required: false
+    }
+});
+
+var PersonSchema = new Schema({
         name : {
             type: String,
             required: true
@@ -18,9 +41,15 @@ var schema = new Schema({
             type: String,
             unique: true,
             required: true
-        }
+        },
+        karmas : [KarmaSchema]
     });
 
-var Person = mongo.model("Person", schema, 'Persons');
+KarmaSchema.add({author: PersonSchema}, "my");
+
+var Person = mongo.model("Person", PersonSchema, 'Person')
+var Karma = mongo.model("Karma", KarmaSchema, 'Karma');
+
 module.exports.Person = Person;
+module.exports.Karma = Karma;
 
