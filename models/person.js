@@ -1,4 +1,4 @@
-var mongo = require('../util/mongo'),
+var mongo = require('../data/mongo'),
     Schema = mongo.Schema;
 
 var KarmaSchema = new Schema({
