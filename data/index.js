@@ -78,11 +78,15 @@ function setKarma(positive, note, targetId, authorId, callback){
                 positive: positive,
                 stamp: Date.now(),
                 note: note,
-                author: author
+                authorId: author.id,
+                satisfy: false
             });
 
             target.karmas.push(karma);
-            target.save(callback);
+            target.save(function (err, res, aff) {
+                if(err) throw err;
+                callback();
+            });
         })
     })
 }

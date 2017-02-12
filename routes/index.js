@@ -29,9 +29,9 @@ module.exports = function(app){
             req.body.positive,
             req.body.note,
             req.body.authorId,
-            req.body.targetId, function(err, res){
+            req.body.targetId, function(err, karma){
                 if(err) throw err
-                res.send(ok);
+                res.send(karma);
             });
     });
 }

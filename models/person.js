@@ -21,9 +21,12 @@ var KarmaSchema = new Schema({
     satisfyStamp : {
         type: Date,
         required: false
+    },
+    authorId: {
+        type: Schema.Types.ObjectId,
+        ref: "Person"
     }
 });
-
 var PersonSchema = new Schema({
         name : {
             type: String,
@@ -44,8 +47,6 @@ var PersonSchema = new Schema({
         },
         karmas : [KarmaSchema]
     });
-
-KarmaSchema.add({author: PersonSchema}, "my");
 
 var Person = mongo.model("Person", PersonSchema, 'Person')
 var Karma = mongo.model("Karma", KarmaSchema, 'Karma');
