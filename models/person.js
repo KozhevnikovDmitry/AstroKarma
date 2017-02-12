@@ -1,8 +1,7 @@
 var mongo = require('../util/mongo'),
     Schema = mongo.Schema;
 
-var schema = new Schema(
-    {
+var schema = new Schema({
         name : {
             type: String,
             required: true
@@ -20,8 +19,8 @@ var schema = new Schema(
             unique: true,
             required: true
         }
-    }
-);
+    });
 
-exports.User = mongo.model("Person", schema)
+var Person = mongo.model("Person", schema, 'Persons');
+module.exports.Person = Person;
 

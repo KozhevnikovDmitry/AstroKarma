@@ -23,6 +23,7 @@ function dropDb(callback) {
 function requireModels(callback){
     require('../models/person');
     async.each(Object.keys(mongo.models), function (modelName, callback) {
+        console.log(modelName);
         mongo.models[modelName].ensureIndexes(callback);
     }, callback);
 }
@@ -45,6 +46,7 @@ function insertPersons(callback){
     async.each(persons, function (pers, callback) {
         var person = new mongo.models.Person(pers);
         person.save(function (err, res, aff) {
+            console.log(res);
             callback();
         })},
         callback
