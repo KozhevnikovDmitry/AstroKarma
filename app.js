@@ -28,7 +28,7 @@ app.engine('ejs', ejsLocals);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
-app.use(bodyparser.urlencoded({extended: true}));
+app.use(bodyparser.json());
 
 // routing
 routes(app);

@@ -19,7 +19,19 @@ module.exports = function(app){
     app.get('/person/:id', function(req, res){
         data.getPerson(req.params.id, function (err, person) {
             if(err) throw err;
-            res.render('person', { title: 'Astro Karma', person: person})
+            res.render('person', { title: 'Astro Karma', person: person});
         });
+    });
+
+    // set karma
+    app.post('/karma', function(req, res){
+        data.setKarma(
+            req.body.positive,
+            req.body.note,
+            req.body.authorId,
+            req.body.targetId, function(err, res){
+                if(err) throw err
+                res.send(ok);
+            });
     });
 }

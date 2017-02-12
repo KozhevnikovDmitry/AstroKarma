@@ -2,8 +2,10 @@
 <%block('title', 'Top karma') %>
 
 
-<p>
+<div>
     <% for(var i=0; i<persons.length; i++) {%>
-    <a href="/person/<%=persons[i].id%>"><%=persons[i].name%></a>
+    <div>
+        <a href="/person/<%=persons[i].id%>"><%=persons[i].name%></a>
+    </div>
     <% } %>
-</p>
+</div>
