@@ -12,9 +12,9 @@ var favicon = require('serve-favicon');
 var ejsLocals = require('ejs-locals');
 
 // custom modules
-var routes = require('routes');
+var routes = require('./routes');
 var config = require('config');
-var log = require('util/log')(module);
+var log = require('log')(module);
 
 // web server
 var app = express();

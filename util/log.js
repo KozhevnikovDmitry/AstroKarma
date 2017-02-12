@@ -1,3 +1,6 @@
+/**
+ * Logger util for logging to console
+ */
 var winston = require("winston");
 var ENV = process.env.NODE_ENV;
 

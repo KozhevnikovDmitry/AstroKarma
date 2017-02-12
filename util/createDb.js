@@ -1,3 +1,7 @@
+/**
+ * Create mongo db script for debug
+ */
+
 var mongo = require("./mongo");
 var async = require("async");
 

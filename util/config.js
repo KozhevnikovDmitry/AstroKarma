@@ -1,3 +1,6 @@
+/**
+ * Config util for config.json
+ */
 var nconf = require('nconf');
 var path = require('path');
 
