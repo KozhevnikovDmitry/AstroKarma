@@ -1,10 +1,9 @@
 <% layout('layout.ejs') -%>
 <%block('title', 'Top karma') %>
 
-<p>
-    <a href="/person">Ivan</a>
-</p>
 
 <p>
-    <a href="/person">Petr</a>
+    <% for(var i=0; i<persons.length; i++) {%>
+    <a href="/person/<%=persons[i].id%>"><%=persons[i].name%></a>
+    <% } %>
 </p>
