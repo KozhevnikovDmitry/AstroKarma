@@ -1,5 +1,5 @@
 {
-  "name": "astrokarma",
+  "name": "astro-karma",
   "description": "Employee karma service for Astrosoft",
   "version": "0.0.1",
   "scripts": {
@@ -10,8 +10,6 @@
     "body-parser": "^1.16.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
-    "ejs": "^2.5.5",
-    "ejs-locals": "^1.0.2",
     "express": "~4.14.1",
     "mongodb": "^2.2.22",
     "mongoose": "^4.8.2",
