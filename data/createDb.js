@@ -36,15 +36,19 @@ function insertPersons(callback){
     var persons = [
         {
             name:"Ivan",
+            nameRu:"Иван",
             surname:"Ivanov",
+            surnameRu:"Иванов",
             position:"Developer",
             email: "ivan.ivanov@astrosoft.ru"
         },
         {
             name:"Petr",
+            nameRu:"Пётр",
             surname:"Petrov",
-            email: "petr.petrov@astrosoft.ru",
-            position:"Developer"
+            surnameRu:"Петров",
+            position:"Developer",
+            email: "petr.petrov@astrosoft.ru"
         }]
 
     async.each(persons, function (pers, callback) {

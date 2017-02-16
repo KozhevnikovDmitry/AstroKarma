@@ -24,7 +24,7 @@ http.createServer(app).listen(app.get('port'), function () {
 })
 
 // middleware
-app.use(favicon(__dirname + '/public/src/favicon.ico'));
+app.use(favicon(__dirname + '/public/src/public/img/favicon.ico'));
 app.use(bodyparser.json());
 
 // routing
