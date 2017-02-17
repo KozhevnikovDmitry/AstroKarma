@@ -4,7 +4,20 @@
 
 var mongo = require("./mongo");
 var Person = require("../models/person").Person;
-var Karma = require("../models/person").Karma;
+var Karma = require("../models/karma").Karma;
+
+/**
+ * Get person by email
+ * @param email
+ * @param callback
+ */
+function authPerson(email, callback){
+    "use strict";
+    Person.findOne({email: email}, function (err, res) {
+        if(err) throw err;
+        callback(null, res);
+    });
+}
 
 /**
  * Add or update person by email
@@ -17,7 +30,9 @@ function addPerson(person, callback){
         if(err) throw err;
         if(res){
             res.name = person.name;
+            res.nameRu = person.nameRu;
             res.surname = person.surname;
+            res.surnameRu = person.surnameRu;
             res.position = person.position;
             res.save(callback);
         }
@@ -38,7 +53,13 @@ function getPerson(id, callback){
     "use strict";
     Person.findById(id, function (err, res) {
         if(err) throw err;
-        callback(null, res);
+
+        Karma.find({targetId: id}, function (err, karmas) {
+            if(err) throw err;
+
+            res.karmas = karmas;
+            callback(null, res);
+        })
     })
 }
 
@@ -51,44 +72,123 @@ function getPersons(callback){
 }
 
 /**
- * Set karma to person
+ * Get karma
+ * @param karma data
+ * @param callback
+ */
+function getKarma(karma, callback){
+    "use strict";
+    Karma.findById(karma.id, function (err, karmaModel) {
+        if(err) throw err;
+
+        getPerson(karma.targetId, function (err, target) {
+            if(err) throw err;
+
+            if(!target){
+                throw Error('No such target person');
+            }
+
+            getPerson(karma.authorId, function (err, author){
+                if(err) throw err;
+
+                if(!author){
+                    throw Error('No such author person');
+                }
+
+                karmaModel.author = author;
+                karmaModel.target = target;
+                callback(null, karmaModel);
+            })
+        })
+    });
+}
+
+/**
+ * Add karma to person
  * @param positive, true if karma is positive
  * @param note, author comment to karma
  * @param targetId, id of target person
  * @param authorId, id of author person
  * @param callback
  */
-function setKarma(positive, note, targetId, authorId, callback){
+function addKarma(karma, callback){
     "use strict";
-    getPerson(targetId, function (err, target) {
+    getPerson(karma.targetId, function (err, target) {
         if(err) throw err;
 
         if(!target){
             throw Error('No such target person');
         }
 
-        getPerson(authorId, function (err, author){
+        getPerson(karma.authorId, function (err, author){
             if(err) throw err;
 
             if(!author){
                 throw Error('No such author person');
             }
 
-            var karma = new Karma({
-                positive: positive,
+            var karmaModel = new Karma({
+                positive: karma.positive,
                 stamp: Date.now(),
-                note: note,
-                authorId: author.id,
+                note: karma.note,
+                authorId: karma.authorId,
+                targetId: karma.targetId,
                 satisfy: false
             });
 
-            target.karmas.push(karma);
-            target.save(function (err, res, aff) {
-                if(err) throw err;
-                callback();
-            });
+            karmaModel.save(callback);
         })
     })
+}
+
+/**
+ * Satisfy karma
+ * @param karma data
+ * @param callback
+ */
+function satisfyKarma(karma, callback)
+{
+    "use strict";
+    Karma.findById(karma.id, function (err, karmaModel) {
+        if(err) throw err;
+
+        karmaModel.satisfy = true;
+        karmaModel.satisfyStamp = Date.now();
+        karmaModel.save(callback);
+    });
+}
+
+/**
+ * Unsatisfy karma
+ * @param karma data
+ * @param callback
+ */
+function unsatisfyKarma(karma, callback)
+{
+    "use strict";
+    Karma.findById(karma.id, function (err, karmaModel) {
+        if(err) throw err;
+
+        karmaModel.satisfy = false;
+        karmaModel.satisfyStamp = null;
+        karmaModel.save(callback);
+    });
+}
+
+/**
+ * Set note to karma
+ * @param karma data
+ * @param callback
+ */
+function setKarmaNote(karma, callback)
+{
+    "use strict";
+    Karma.findById(karma.id, function (err, karmaModel) {
+        if(err) throw err;
+
+        karmaModel.note = karma.note
+        karmaModel.save(callback);
+    });
 }
 
 /**
@@ -102,11 +202,16 @@ function removeKarma(id, callback){
 }
 
 module.exports = {
+    authPerson : authPerson,
     addPerson : addPerson,
     getPerson : getPerson,
     getPersons : getPersons,
-    setKarma : setKarma,
-    removeKarma : removeKarma
+    getKarma : getKarma,
+    addKarma : addKarma,
+    removeKarma : removeKarma,
+    setKarmaNote : setKarmaNote,
+    satisfyKarma : satisfyKarma,
+    unsatisfyKarma : unsatisfyKarma
 };
 
 
