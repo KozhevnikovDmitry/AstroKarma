@@ -9,7 +9,7 @@ var http = require('http');
 var express = require('express');
 var bodyparser = require('body-parser');
 var favicon = require('serve-favicon');
-var ejsLocals = require('ejs-locals');
+var ejs = require('ejs');
 
 // custom modules
 var routes = require('./routes');
@@ -24,12 +24,14 @@ http.createServer(app).listen(app.get('port'), function () {
 })
 
 // middleware
-app.use(favicon(__dirname + '/public/src/public/img/favicon.ico'));
-app.use(bodyparser.json());
+app.use(favicon(__dirname + '/public/dist/img/favicon.ico'));
+app.use(bodyparser.json())
 
-// routing
+// routing and static
 routes(app);
-app.use(express.static(path.join(__dirname, 'public')))
-
+app.use(express.static(path.join(__dirname, 'public/dist')))
+app.set('views', path.join(__dirname, 'public/dist'));
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
 
 module.exports = app;

@@ -6,8 +6,13 @@ module.exports = function(app){
 
     var data = require("../data");
 
-    // return all persons
+    // render index.html
     app.get('/', function(req, res){
+       res.render('index.html');
+    });
+
+    // return all persons
+    app.get('/person', function(req, res){
         data.getPersons(function (err, persons) {
             if(err) throw err;
             console.log(persons);
