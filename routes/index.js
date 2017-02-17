@@ -5,11 +5,36 @@ module.exports = function(app){
     "use strict";
 
     var data = require("../data");
+    var passport = require('passport');
+    var WindowsStrategy = require('passport-windowsauth');
+    passport.use(new WindowsStrategy({
+        ldap: {
+            url:             '',
+            base:            '',
+            bindDN:          '',
+            bindCredentials: ''
+        },
+        integrated:      false
+    }, function(profile, done){
+        data.authPerson(profile.emails[0].value.toLowerCase(), function (err, person) {
+            done(err, person);
+        });
+    }));
 
     // render index.html
     app.get('/', function(req, res){
        res.render('index.html');
     });
+
+    app.post('/login',
+            passport.authenticate('WindowsAuthentication', {
+                successRedirect: '/',
+                failureRedirect: '/login',
+                failureFlash:    true }),
+            function (req, res) {
+            res.send("OK")
+        }
+    );
 
     // return all persons
     app.get('/person', function(req, res){
