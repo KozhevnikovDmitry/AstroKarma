@@ -27,7 +27,7 @@ http.createServer(app).listen(app.get('port'), function () {
 
 // middleware
 app.use(favicon(__dirname + '/public/dist/img/favicon.ico'));
-app.use(cookieparser);
+app.use(cookieparser());
 app.use(bodyparser.json())
 
 // routing and static

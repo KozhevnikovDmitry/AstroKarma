@@ -1,0 +1,14 @@
+version: '2'
+services:
+  astro-karma-service:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - mongoose_uri=mongodb://astro-karma-storage:27017/astrokarma
+    depends_on:
+      - astro-karma-storage
+  astro-karma-storage:
+    image: mongo
+    ports:
+      - "27017:27017"

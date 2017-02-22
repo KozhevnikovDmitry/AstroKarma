@@ -7,7 +7,7 @@ module.exports = function(app){
     var data = require("../data");
     var passport = require('passport');
     var WindowsStrategy = require('passport-windowsauth');
-    passport.use(new WindowsStrategy({
+    /*passport.use(new WindowsStrategy({
         ldap: {
             url:             '',
             base:            '',
@@ -19,7 +19,7 @@ module.exports = function(app){
         data.authPerson(profile.emails[0].value.toLowerCase(), function (err, person) {
             done(err, person);
         });
-    }));
+    }));*/
 
     // render index.html
     app.get('/', function(req, res){
