@@ -20,6 +20,43 @@ function authPerson(email, callback){
 }
 
 /**
+ * Return top of karma by month
+ * @param from - from this date
+ * @param to - to this date
+ * @param page - size of page
+ * @param offset - offset in cursor
+ * @param callback
+ */
+function getKarmaTop(from, to, page, offset, callback){
+    "use strict";
+    Karma.aggregate([{$match: {stamp : {$gte: from, $lte: to}}},
+                     {$group:{_id: "$targetId",
+                              positive: { $sum : { $cond: { if: { $eq: [ "$positive", true ] }, then: 1, else: 0 } } },
+                              negative: { $sum : { $cond: { if: { $eq: [ "$positive", false ] }, then: 1, else: 0 } } },
+                             }},
+                     {$sort: {positive: -1}},
+                     {$lookup:
+                        {
+                            from: "Person",
+                            localField: "_id",
+                            foreignField: "_id",
+                            as: "persons"
+                        }},
+                     {$project:{
+                        positive:1,
+                        negative:1,
+                        person: { $arrayElemAt: [ "$persons", 0 ] },
+                     }},
+                     {$limit: page},
+                     {$skip: page*offset}
+        ], function (err, top){
+
+        if(err) throw err;
+        callback(null, top)
+    })
+}
+
+/**
  * Add or update person by email
  * @param person
  * @param callback
@@ -203,6 +240,7 @@ function removeKarma(id, callback){
 
 module.exports = {
     authPerson : authPerson,
+    getKarmaTop : getKarmaTop,
     addPerson : addPerson,
     getPerson : getPerson,
     getPersons : getPersons,

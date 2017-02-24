@@ -5,8 +5,8 @@ module.exports = function(app){
     "use strict";
 
     var data = require("../data");
-    var passport = require('passport');
-    var WindowsStrategy = require('passport-windowsauth');
+    //var passport = require('passport');
+    //var WindowsStrategy = require('passport-windowsauth');
     /*passport.use(new WindowsStrategy({
         ldap: {
             url:             '',
@@ -26,15 +26,30 @@ module.exports = function(app){
        res.render('index.html');
     });
 
-    app.post('/login',
-            passport.authenticate('WindowsAuthentication', {
-                successRedirect: '/',
-                failureRedirect: '/login',
-                failureFlash:    true }),
-            function (req, res) {
-            res.send("OK")
-        }
-    );
+    //app.post('/login',
+    //        passport.authenticate('WindowsAuthentication', {
+    //            successRedirect: '/',
+    //            failureRedirect: '/login',
+    //            failureFlash:    true }),
+    //        function (req, res) {
+    //        res.send("OK")
+    //    }
+    //);
+
+    // return all karma top
+    app.get('/person/top/:page/:offset', function(req, res){
+
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        console.log(req.params);
+        data.getKarmaTop(firstDay, lastDay, parseInt(req.params.page), parseInt(req.params.offset),
+            function (err, top) {
+            if(err) throw err;
+            console.log(top);
+            res.send(top)
+        });
+    });
 
     // return all persons
     app.get('/person', function(req, res){

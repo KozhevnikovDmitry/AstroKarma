@@ -11,7 +11,7 @@ var bodyparser = require('body-parser');
 var cookieparser = require('cookie-parser');
 var favicon = require('serve-favicon');
 var ejs = require('ejs');
-var passport = require('passport');
+//var passport = require('passport');
 
 // custom modules
 var routes = require('./routes');
@@ -38,7 +38,7 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 // authentification
-app.use(passport.initialize());
+//app.use(passport.initialize());
 
 
 module.exports = app;
