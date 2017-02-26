@@ -9,5 +9,11 @@
         }
       }
     }
+  },
+  "ldapConnection":{
+     "url":"",
+     "base":"",
+     "bindDN":"",
+     "bindCredentials":""
   }
 }
