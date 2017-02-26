@@ -14,9 +14,9 @@ ObjectID = require('mongodb').ObjectID;
  */
 function authPerson(email, callback){
     "use strict";
-    Person.findOne({email: email}, function (err, res) {
+    Person.aggregate([{$match: {email : {$eq : email}}}, {$limit : 1}], function (err, res) {
         if(err) throw err;
-        callback(null, res);
+        callback(null, res[0]);
     });
 }
 
@@ -151,6 +151,11 @@ function getPersons(callback){
     Person.find(callback);
 }
 
+function getPerson(id, callback){
+    "use strict";
+    Person.findById(id, callback);
+}
+
 
 /**
  * Add karma to person
@@ -252,6 +257,7 @@ function removeKarma(id, callback){
 
 module.exports = {
     authPerson : authPerson,
+    getPerson: getPerson,
     getKarmaTop : getKarmaTop,
     addPerson : addPerson,
     getPersonKarma : getPersonKarma,

@@ -10,7 +10,7 @@ module.exports = function(app){
     });
 
     // authentificate user
-    //app.post('/login', require("./auth").login);
+    app.post('/login', require("./auth").login);
 
     // return all karma top by currrent month
     app.get('/person/top/:page/:offset', require("./queries/topKarma").getTopKarma);
