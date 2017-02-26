@@ -5,6 +5,7 @@
 var mongo = require("./mongo");
 var Person = require("../models/person").Person;
 var Karma = require("../models/karma").Karma;
+ObjectID = require('mongodb').ObjectID;
 
 /**
  * Get person by email
@@ -57,6 +58,66 @@ function getKarmaTop(from, to, page, offset, callback){
 }
 
 /**
+ * Get person by id with karma by month
+ * @param id of person
+ * @param from - join karma from this date
+ * @param to - join karm to this date
+ * @param callback
+ */
+function getPersonKarma(id, from, to, callback){
+    "use strict";
+    Person.aggregate([{$match:{_id: {$eq: new ObjectID(id)}}}],
+
+        function (err, res) {
+            if(err) throw err;
+
+            Karma.aggregate([{$match:{ $and: [{targetId: {$eq: new ObjectID(id)}}, {stamp : {$gte: from, $lte: to} }]}}],
+                function (err, karmas) {
+                    if(err) throw err;
+                    res[0].karmas = karmas;
+                    callback(null, res[0]);
+                })
+        })
+}
+
+/**
+ * Get karma
+ * @param id of karma
+ * @param callback
+ */
+function getKarma(id, callback){
+    "use strict";
+
+    Karma.aggregate([{$match:{_id: {$eq: new ObjectID(id)}}},
+        {$limit: 1},
+        {$lookup:{
+            from: "Person",
+            localField: "targetId",
+            foreignField: "_id",
+            as: "target"
+        }},
+        {$lookup:{
+            from: "Person",
+            localField: "authorId",
+            foreignField: "_id",
+            as: "author"
+        }},
+        {$project:{
+            positive:1,
+            stamp:1,
+            note:1,
+            satisfy:1,
+            satisfyStamp:1,
+            authorId:1,
+            targetId:1,
+            target: { $arrayElemAt: [ "$target", 0 ] },
+            author: { $arrayElemAt: [ "$author", 0 ] },
+        }}], function(err, res) {
+        callback(null, res[0]);
+    });
+}
+
+/**
  * Add or update person by email
  * @param person
  * @param callback
@@ -81,24 +142,6 @@ function addPerson(person, callback){
     })
 }
 
-/**
- * Get person by id
- * @param id of person
- * @param callback
- */
-function getPerson(id, callback){
-    "use strict";
-    Person.findById(id, function (err, res) {
-        if(err) throw err;
-
-        Karma.find({targetId: id}, function (err, karmas) {
-            if(err) throw err;
-
-            res.karmas = karmas;
-            callback(null, res);
-        })
-    })
-}
 
 /**
  *  Get all persons
@@ -108,37 +151,6 @@ function getPersons(callback){
     Person.find(callback);
 }
 
-/**
- * Get karma
- * @param karma data
- * @param callback
- */
-function getKarma(karma, callback){
-    "use strict";
-    Karma.findById(karma.id, function (err, karmaModel) {
-        if(err) throw err;
-
-        getPerson(karma.targetId, function (err, target) {
-            if(err) throw err;
-
-            if(!target){
-                throw Error('No such target person');
-            }
-
-            getPerson(karma.authorId, function (err, author){
-                if(err) throw err;
-
-                if(!author){
-                    throw Error('No such author person');
-                }
-
-                karmaModel.author = author;
-                karmaModel.target = target;
-                callback(null, karmaModel);
-            })
-        })
-    });
-}
 
 /**
  * Add karma to person
@@ -150,14 +162,14 @@ function getKarma(karma, callback){
  */
 function addKarma(karma, callback){
     "use strict";
-    getPerson(karma.targetId, function (err, target) {
+    Person.findById(karma.targetId, function (err, target) {
         if(err) throw err;
 
         if(!target){
             throw Error('No such target person');
         }
 
-        getPerson(karma.authorId, function (err, author){
+        Person.findById(karma.authorId, function (err, author){
             if(err) throw err;
 
             if(!author){
@@ -242,7 +254,7 @@ module.exports = {
     authPerson : authPerson,
     getKarmaTop : getKarmaTop,
     addPerson : addPerson,
-    getPerson : getPerson,
+    getPersonKarma : getPersonKarma,
     getPersons : getPersons,
     getKarma : getKarma,
     addKarma : addKarma,

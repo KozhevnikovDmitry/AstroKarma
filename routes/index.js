@@ -36,7 +36,7 @@ module.exports = function(app){
     //    }
     //);
 
-    // return all karma top
+    // return all karma top by currrent month
     app.get('/person/top/:page/:offset', function(req, res){
 
         var date = new Date();
@@ -60,9 +60,14 @@ module.exports = function(app){
         });
     });
 
-    // return person by id
+    // return person by id with karma by current month
     app.get('/person/:id', function(req, res){
-        data.getPerson(req.params.id, function (err, person) {
+
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+        data.getPerson(req.params.id, firstDay, lastDay, function (err, person) {
             if(err) throw err;
             res.send(person);
         });
