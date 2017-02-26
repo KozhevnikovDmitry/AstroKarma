@@ -1,6 +1,6 @@
 var data = require("../../data/index");
 
-module.exports.getTopKarma = function(req, res) {
+module.exports.getTopKarma = function(req, res, next) {
     "use strict";
     var date = new Date();
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -8,7 +8,7 @@ module.exports.getTopKarma = function(req, res) {
     console.log(req.params);
     data.getKarmaTop(firstDay, lastDay, parseInt(req.params.page), parseInt(req.params.offset),
         function (err, top) {
-            if(err) throw err;
+            if(err) next(err);
             console.log(top);
             res.send(top)
         });

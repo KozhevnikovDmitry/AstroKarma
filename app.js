@@ -40,5 +40,4 @@ app.engine('html', require('ejs').renderFile);
 // authentification
 //app.use(passport.initialize());
 
-
 module.exports = app;

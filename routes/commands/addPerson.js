@@ -1,6 +1,6 @@
 var data = require("../../data/index");
 
-module.exports.addPerson = function(req, res) {
+module.exports.addPerson = function(req, res, next) {
     "use strict";
 
     data.addPerson({
@@ -11,7 +11,7 @@ module.exports.addPerson = function(req, res) {
             position: req.body.position,
             email: req.body.email },
         function(err, person){
-            if(err) throw err
+            if(err) next(err);
             res.send(person);
         });
 };

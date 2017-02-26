@@ -1,6 +1,6 @@
 var data = require("../../data/index");
 
-module.exports.addKarma = function(req, res) {
+module.exports.addKarma = function(req, res, next) {
     "use strict";
 
     data.addKarma({
@@ -9,7 +9,7 @@ module.exports.addKarma = function(req, res) {
             authorId: req.body.authorId,
             targetId: req.body.targetId},
         function(err, karma){
-            if(err) throw err
+            if(err) next(err);
             res.send(karma);
         });
 };
