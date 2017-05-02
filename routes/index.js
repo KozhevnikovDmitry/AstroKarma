@@ -9,11 +9,8 @@ module.exports = function(app){
        res.render('index.html');
     });
 
-    // authentificate user
-    app.post('/login', require("./auth").login);
-
     // return all karma top by currrent month
-    app.get('/person/top/:page/:offset', require("./queries/topKarma").getTopKarma);
+    app.get('/person/top/:page/:offset',  require("./queries/topKarma").getTopKarma);
 
     // return person by id with karma by current month
     app.get('/person/:id', require("./queries/personKarma").getPersonKarma);
